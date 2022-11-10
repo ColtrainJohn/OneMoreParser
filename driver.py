@@ -23,10 +23,6 @@ class Bot:
         self.region = self.getSelector('region')
         # Main table
         self.table = self.getSelector('table')
-        # # Index names
-        # self.row_names_container = self.getSelector('index')
-        # # Column names
-        # self.col_names_container = self.getSelector('columns')
         # Button to declick
         self.declicker = self.getSelector('declicker')
         sleep(1)
@@ -48,6 +44,10 @@ class Bot:
             values = array(values.split('\n')).reshape(len(index), 8)
             tab = DataFrame(values, index=index, columns=cols)
             tab.to_excel(f'{self.y}_{self.m}_{self.r}.xlsx')
+            print('\n')
+            print(f'{self.y} {self.m} {self.r}')
+            print(f'Current options number: Year: {num} Month: {num1} Region: {num2}')
+            print('\n')
         except Exception as ex:
             print(ex)
 
@@ -84,10 +84,6 @@ class Bot:
                     self.r = self.getSelectorOptions('region', num=k)
                     sleep(1)
                     self.getTable()
-                    print('\n')
-                    print(f'{self.y}_{self.m}_{self.r}')
-                    print(f'Current options number: Year: {num} Month: {num1} Region: {num2}')
-                    print('\n')
 
 
 if __name__ == '__main__':
