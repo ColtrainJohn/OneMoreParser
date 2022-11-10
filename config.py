@@ -6,10 +6,21 @@ def checkOption(option, name):
     return False
 
 
+bunchOfButtons = {
+        "year" : "//div[@id='ext-element-7']",
+        "month" : "//div[@id='ext-element-8']",
+        "region" : "//div[@id='ext-element-5']",
+        "table" : "//div[@id='ext-element-15']",
+        "index" : "//div[@id='ext-element-14']",
+        "columns" : "//div[@data-ref='titleEl']", # shitty search path
+        "declicker" : "//div[@id='ext-element-4']", # try to find nicer declicker
+    }
 
 url = "https://www.iminfin.ru/areas-of-analysis/health/perechen-zabolevanij?territory=45000000"
 
-years = [str(i) for i in list(range(2015, 2022))]
+
+### wtf?!?&!&
+years = [str(i) for i in list(range(2016, 2023))]
 
 months = ["Декабрь", "Ноябрь", "Октябрь", "Сентябрь", "Август", "Июль", "Июнь", "Май", "Апрель", "Март", "Февраль", "Январь"]
 
