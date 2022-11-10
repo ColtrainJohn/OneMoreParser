@@ -11,8 +11,11 @@ from selenium.webdriver.firefox.options import Options
 import config as con
 
 class Bot:
-    def __init__(self):
-        self.driver = webdriver.Firefox(options=Options())
+    def __init__(self, win=False):
+        if win:
+            self.driver = webdriver.Chrome()
+        else:
+            self.driver = webdriver.Firefox(options=Options())
         self.driver.get(con.url)
         sleep(3)
         # Year selector
@@ -46,7 +49,6 @@ class Bot:
             tab.to_excel(f'{self.y}_{self.m}_{self.r}.xlsx')
             print('\n')
             print(f'{self.y} {self.m} {self.r}')
-            print(f'Current options number: Year: {num} Month: {num1} Region: {num2}')
             print('\n')
         except Exception as ex:
             print(ex)
@@ -87,7 +89,7 @@ class Bot:
 
 
 if __name__ == '__main__':
-    bot = Bot()
+    bot = Bot(win=True)
     try:
         bot.iterate()
     except Exception as ex:
