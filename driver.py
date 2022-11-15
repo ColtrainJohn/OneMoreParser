@@ -1,6 +1,7 @@
 from time import sleep
 from numpy import array
 from pandas import DataFrame
+import sys
 
 # selenium
 from selenium import webdriver
@@ -9,13 +10,20 @@ from selenium.webdriver.firefox.options import Options
 
 # this lib
 import config as con
+from args import parseArguments
 
 class Bot:
-    def __init__(self, win=False):
+    def __init__(self, win=False, args=False):
+        if args:
+            self.savePath = args.out
         if win:
             self.driver = webdriver.Chrome()
         else:
-            self.driver = webdriver.Firefox(options=Options())
+            options = Options()
+            options.headless = args.headless
+            self.driver = webdriver.Firefox(
+                options=Options()
+            )
         self.driver.get(con.url)
         sleep(3)
         # Year selector
@@ -46,10 +54,8 @@ class Bot:
             values = '-\n'.join([i.replace('\u202f', '') for i in self.table.text.split(' ') if i != ''])
             values = array(values.split('\n')).reshape(len(index), 8)
             tab = DataFrame(values, index=index, columns=cols)
-            tab.to_excel(f'{self.y}_{self.m}_{self.r}.xlsx')
-            print('\n')
+            tab.to_excel(f'{self.savePath}/{self.y}_{self.m}_{self.r}.xlsx')
             print(f'{self.y} {self.m} {self.r}')
-            print('\n')
         except Exception as ex:
             print(ex)
 
@@ -89,7 +95,9 @@ class Bot:
 
 
 if __name__ == '__main__':
-    bot = Bot(win=True)
+    parser = parseArguments()
+    args = parser.parse_args()
+    bot = Bot(args=args)
     try:
         bot.iterate()
     except Exception as ex:
