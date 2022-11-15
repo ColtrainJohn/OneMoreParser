@@ -1,7 +1,6 @@
 from time import sleep
 from numpy import array
 from pandas import DataFrame
-import sys
 
 # selenium
 from selenium import webdriver
@@ -12,6 +11,7 @@ from selenium.webdriver.firefox.options import Options
 import config as con
 from args import parseArguments
 
+
 class Bot:
     def __init__(self, win=False, args=False):
         if args:
@@ -20,9 +20,9 @@ class Bot:
             self.driver = webdriver.Chrome()
         else:
             options = Options()
-            options.headless = args.headless
+            options.headless = args.headless 
             self.driver = webdriver.Firefox(
-                options=Options()
+                options=options
             )
         self.driver.get(con.url)
         sleep(3)
@@ -79,10 +79,11 @@ class Bot:
             options[num].click() # close drop down list
             return text
 
+
     # multiprocces?
-    def iterate(self):
+    def iterate(self, lastYear=False):
         num = len(self.getSelectorOptions('year'))
-        for n in range(num)[::-1]:
+        for n in range(1) if lastYear else range(num)[::-1]:
             self.y = self.getSelectorOptions('year', num=n)
             num1 = len(self.getSelectorOptions('month'))
             for m in range(num1)[::-1]:
@@ -94,12 +95,14 @@ class Bot:
                     self.getTable()
 
 
+
+
+
 if __name__ == '__main__':
-    parser = parseArguments()
-    args = parser.parse_args()
-    bot = Bot(args=args)
+ 
+    bot = Bot(args=parseArguments())
     try:
-        bot.iterate()
+        bot.iterate(lastYear=True)
     except Exception as ex:
         print(ex)
         bot.driver.quit()

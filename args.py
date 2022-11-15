@@ -13,12 +13,12 @@ def parseArguments():
     parser.add_argument('-year', metavar='-Y', help='Distinct year to parse', default=False)
     parser.add_argument('-month', metavar='-M', help='Distinct month to parse', default=False)
     parser.add_argument('-region', metavar='-R', help='Distinct region to parse', default=False)
-    parser.add_argument('-headless', metavar='-H', help='headless browser mode', default=True)
-    return parser
+    parser.add_argument('-headless', metavar='-H', help='headless browser mode', default=0)
+    
+    return parser.parse_args()
 
 
 if __name__ == '__main__':
-    parser = parseArguments()
-    args = parser.parse_args()
-    print(args)
+    print(parseArguments())
+    
     
