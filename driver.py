@@ -5,25 +5,20 @@ from pandas import DataFrame
 # selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
+#from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
+import geckodriver_autoinstaller
+
 
 # this lib
 import config as con
 from args import parseArguments
+from getDriver import getDriver
 
 
 class Bot:
-    def __init__(self, win=False, args=False):
-        if args:
-            self.savePath = args.out
-        if win:
-            self.driver = webdriver.Chrome()
-        else:
-            options = Options()
-            options.headless = args.headless 
-            self.driver = webdriver.Firefox(
-                options=options
-            )
+    def __init__(self):
+        self.driver = getDriver()
         self.driver.get(con.url)
         sleep(3)
         # Year selector
@@ -35,7 +30,10 @@ class Bot:
         # Main table
         self.table = self.getSelector('table')
         # Button to declick
-        self.declicker = self.getSelector('declicker')
+        #self.declicker = self.getSelector('declicker')
+        self.declicker = self.driver.find_element(By.XPATH, "//div[@id='ext-element-4']"
+                    ).find_element(By.XPATH, '//span[@class="x-btn-wrap x-btn-wrap-default-small x-btn-arrow x-btn-arrow-right"]')
+
         sleep(1)
         print("Capture buttons : Done")
 
@@ -44,17 +42,17 @@ class Bot:
     def getTable(self):
         # get row names
         index = self.getSelector('index').text.split('\n')
-
         # get column names
-        cols = [i.text for i in self.getSelector('columns') if i.text.find('20') > -1]
-        cols = [*cols[:2], 'отклонение', 'прирост', *cols[2:], 'отклонение', 'прирост']
+        #cols = [i.text for i in self.getSelector('columns') if i.text.find('20') > -1]
+        #cols = [*cols[:2], 'отклонение', 'прирост', *cols[2:], 'отклонение', 'прирост']
+        cols = ['this_year', 'last_year', 'отклонение', 'прирост', 'this_year', 'last_year', 'отклонение', 'прирост']
 
         # get table
         try:
             values = '-\n'.join([i.replace('\u202f', '') for i in self.table.text.split(' ') if i != ''])
             values = array(values.split('\n')).reshape(len(index), 8)
             tab = DataFrame(values, index=index, columns=cols)
-            tab.to_excel(f'{self.savePath}/{self.y}_{self.m}_{self.r}.xlsx')
+            tab.to_excel(f'./out/{self.y}_{self.m}_{self.r}.xlsx')
             print(f'{self.y} {self.m} {self.r}')
         except Exception as ex:
             print(ex)
@@ -74,16 +72,16 @@ class Bot:
             self.declicker.click()
             return options
         else:
-            print('Options lenght : ', len(options))
+            #print('Options lenght : ', len(options))
             text = options[num].text
             options[num].click() # close drop down list
             return text
 
 
     # multiprocces?
-    def iterate(self, lastYear=False):
+    def iterate(self, lastYears=False):
         num = len(self.getSelectorOptions('year'))
-        for n in range(1) if lastYear else range(num)[::-1]:
+        for n in range(lastYears) if lastYears else range(num)[::-1]:
             self.y = self.getSelectorOptions('year', num=n)
             num1 = len(self.getSelectorOptions('month'))
             for m in range(num1)[::-1]:
@@ -91,7 +89,7 @@ class Bot:
                 num2 = len(self.getSelectorOptions('region'))
                 for k in range(num2)[::-1]:
                     self.r = self.getSelectorOptions('region', num=k)
-                    sleep(1)
+                    self.declicker.click()
                     self.getTable()
 
 
@@ -99,10 +97,10 @@ class Bot:
 
 
 if __name__ == '__main__':
- 
-    bot = Bot(args=parseArguments())
+    #geckodriver_autoinstaller.install()
+    bot = Bot()
     try:
-        bot.iterate(lastYear=True)
+        bot.iterate(lastYears=2)
     except Exception as ex:
         print(ex)
         bot.driver.quit()

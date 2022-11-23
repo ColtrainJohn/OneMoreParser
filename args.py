@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 
 
@@ -13,9 +14,10 @@ def parseArguments():
     parser.add_argument('-year', metavar='-Y', help='Distinct year to parse', default=False)
     parser.add_argument('-month', metavar='-M', help='Distinct month to parse', default=False)
     parser.add_argument('-region', metavar='-R', help='Distinct region to parse', default=False)
-    parser.add_argument('-headless', metavar='-H', help='headless browser mode', default=0)
+    parser.add_argument('-headless', metavar='-H', help='headless browser mode', default=1)
     
-    return parser.parse_args()
+    args = parser.parse_args()
+    return args
 
 
 if __name__ == '__main__':
