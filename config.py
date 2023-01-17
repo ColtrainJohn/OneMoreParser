@@ -7,6 +7,18 @@ def checkOption(option, name):
 
 
 
+
+bunchOfButtons = {
+        "year" : "//div[@id='ext-element-7']",
+        "month" : "//div[@id='ext-element-8']",
+        "region" : "//div[@id='ext-element-5']",
+        "table" : "//div[@id='ext-element-15']",
+        "index" : "",
+        "columns" : "",
+        "declicker" : "//div[@id='ext-element-4']//span[@class='x-btn-wrap x-btn-wrap-default-small x-btn-arrow x-btn-arrow-right']",
+    }
+
+
 url = "https://www.iminfin.ru/areas-of-analysis/health/perechen-zabolevanij?territory=45000000"
 
 years = [str(i) for i in list(range(2015, 2023))]

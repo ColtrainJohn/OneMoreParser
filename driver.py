@@ -7,7 +7,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 #from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.chrome.options import Options
-import geckodriver_autoinstaller
 
 
 # this lib
@@ -29,6 +28,8 @@ class Bot:
         self.region = self.getSelector('region')
         # Main table
         self.table = self.getSelector('table')
+        
+
         # Button to declick
         #self.declicker = self.getSelector('declicker')
         self.declicker = self.driver.find_element(By.XPATH, "//div[@id='ext-element-4']"
@@ -67,12 +68,12 @@ class Bot:
     def getSelectorOptions(self, name, num='return_all'):
         selector = self.getSelector(name)
         selector.click() # open drop down list
-        options = [i for i in selector.find_elements(By.XPATH, '//li[text()!=""]') if con.checkOption(i, name)]
+        options = [i for i in selector.find_elements(By.XPATH, '//li[text()!=""]')]# if con.checkOption(i, name)]
         if num == 'return_all':
             self.declicker.click()
             return options
         else:
-            #print('Options lenght : ', len(options))
+            print('Options lenght : ', len(options))
             text = options[num].text
             options[num].click() # close drop down list
             return text
@@ -94,10 +95,7 @@ class Bot:
 
 
 
-
-
-if __name__ == '__main__':
-    #geckodriver_autoinstaller.install()
+def main():
     bot = Bot()
     try:
         bot.iterate(lastYears=2)
@@ -106,3 +104,8 @@ if __name__ == '__main__':
         bot.driver.quit()
     finally:
        bot.driver.quit()
+
+
+
+if __name__ == '__main__':
+    main()
