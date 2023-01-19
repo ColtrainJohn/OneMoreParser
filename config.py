@@ -1,21 +1,27 @@
 
 
+driverOptions = [
+    "--no-sandbox",
+    "--headless",
+    "--disable-dev-shm-usage",
+    "--disable-extensions"
+]
+
+
 def checkOption(option, name):
     if option.text in checkDict[name]:
         return True
     return False
 
 
-
-
-bunchOfButtons = {
+selectorHandlers = {
         "year" : "//div[@id='ext-element-7']",
         "month" : "//div[@id='ext-element-8']",
         "region" : "//div[@id='ext-element-5']",
         "table" : "//div[@id='ext-element-15']",
-        "index" : "",
-        "columns" : "",
-        "declicker" : "//div[@id='ext-element-4']//span[@class='x-btn-wrap x-btn-wrap-default-small x-btn-arrow x-btn-arrow-right']",
+        "tableIndex" : "//div[@id='ext-element-14']",
+        # "columns" : "",
+        "declicker" : "//span[@class='x-btn-wrap x-btn-wrap-default-small x-btn-arrow x-btn-arrow-right']",
     }
 
 
